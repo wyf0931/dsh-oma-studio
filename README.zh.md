@@ -79,6 +79,8 @@ Host 侧需要 `@deepseek-ai/cordis`、`@deepseek-ai/schemastery`、`@deepseek-a
 
 **Settings → OMA Studio**：同一份名册以卡片呈现（名称、id、来源徽标、已挂载/异常徽标、工具数、诊断），顶部搜索框按名称/id/描述过滤，表单覆盖记录的全部字段。profile 自带的 preset 以只读方式出现——它们属于 profile 的 patch 文件，页面会直接说明。
 
+官方 `@deepseek-ai/dsh-web-app` bundle 自带的 4 个 preset（`standard`、`ptc`、`minimal`、`cordis`）默认隐藏，页面一打开就是你自己的角色；勾上「显示系统预设」才会包含它们。过滤依据是这份固定 id 列表，而不是 preset 的 source——你在自己 patch 里声明的角色（例如 `coordinator`）始终显示。agent 工具 `oma_studio` 用同一个 `includeSystem` 开关，而显式按 id 调 `get` 时即使列表隐藏了系统 preset 也能读到。
+
 任何写操作（两个入口都一样）都先请求 `danger-full-access` 审批：它会注册并挂载 Host 插件行、在选中该 preset 的每个会话里生效、并把记录持久化到 DSH home。`list`/`get` 只读免审批。没有审批通道时写操作会 fail closed，什么也不会写。
 
 ## 状态与安全
