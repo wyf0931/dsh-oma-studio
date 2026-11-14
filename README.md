@@ -81,6 +81,8 @@ Every preset also carries a `@deepseek-ai/dsh-time-context` row, so a role alway
 
 The four presets the shipped `@deepseek-ai/dsh-web-app` bundle declares (`standard`, `ptc`, `minimal`, `cordis`) are hidden by default, so the page opens on your own roles; tick **Show system presets** to include them. The filter is that fixed id list, never the preset source, so a role you declared in your own patch layer (for example `coordinator`) always appears. The `oma_studio` tool takes the same `includeSystem` flag, and an explicit `get` by id reads a system preset even while the list hides it.
 
+Every card carries a switch on its right: turn it off to hide that role from the list, and tick **Show hidden** to bring hidden rows back. The choice is stored in `presets.json` (`hidden` ids), so it survives a restart; hiding only affects this page's listing and never unmounts a role. The `oma_studio` tool exposes the same state through `set_hidden` and `includeHidden`.
+
 Every mutation (from either face) asks for `danger-full-access` approval first: it registers Host plugin rows, mounts them inside every session that selects the preset, and persists the record under the DSH home. `list`/`get` are read-only and need no approval. Without an approval channel a mutation fails closed and nothing is written.
 
 ## State and safety

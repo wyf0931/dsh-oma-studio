@@ -81,6 +81,8 @@ Host 侧需要 `@deepseek-ai/cordis`、`@deepseek-ai/schemastery`、`@deepseek-a
 
 官方 `@deepseek-ai/dsh-web-app` bundle 自带的 4 个 preset（`standard`、`ptc`、`minimal`、`cordis`）默认隐藏，页面一打开就是你自己的角色；勾上「显示系统预设」才会包含它们。过滤依据是这份固定 id 列表，而不是 preset 的 source——你在自己 patch 里声明的角色（例如 `coordinator`）始终显示。agent 工具 `oma_studio` 用同一个 `includeSystem` 开关，而显式按 id 调 `get` 时即使列表隐藏了系统 preset 也能读到。
 
+每张卡片右侧有一个开关：关掉即把该角色从列表隐藏，勾上「显示已隐藏」可以把它们找回来。选择保存在 `presets.json` 的 `hidden` 列表中，重启后依然有效；隐藏只影响本页列表，不会卸载角色。agent 工具通过 `set_hidden` 与 `includeHidden` 提供同样的能力。
+
 任何写操作（两个入口都一样）都先请求 `danger-full-access` 审批：它会注册并挂载 Host 插件行、在选中该 preset 的每个会话里生效、并把记录持久化到 DSH home。`list`/`get` 只读免审批。没有审批通道时写操作会 fail closed，什么也不会写。
 
 ## 状态与安全
