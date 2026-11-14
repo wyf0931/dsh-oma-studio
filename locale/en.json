@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "OMA Studio",
+    "description": "Oh My Agent: describe one agent role as a record, compile it into a Cordis composition and register it as an Agent Preset — persona, tool switches, skill roots and delegation rights, managed from Settings or through the oma_studio tool."
+  }
+}

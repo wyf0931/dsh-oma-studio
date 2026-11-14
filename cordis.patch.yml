@@ -1,0 +1,6 @@
+# dsh-oma-studio bundle layer: one Host row for the preset store, the
+# `oma_studio` agent tool and the /api/oma-studio routes. The browser half is
+# discovered through the package's dsh.client declaration and needs no row.
+- insert:
+    - id: oma-studio
+      name: 'dsh-oma-studio'

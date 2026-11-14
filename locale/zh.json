@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "OMA Studio",
+    "description": "Oh My Agent：把「一个 agent 角色」描述成一条记录，编译成 Cordis 组合并注册为 Agent Preset——人格、工具开关、skill 目录与委派权限，在 Settings 页或通过 oma_studio 工具增删改查。"
+  }
+}
