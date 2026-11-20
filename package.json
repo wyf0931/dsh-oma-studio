@@ -1,6 +1,6 @@
 {
   "name": "dsh-oma-studio",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "OMA Studio (Oh My Agent) — build, edit and manage DeepSeek Harness agent presets as a deterministic agent team, from the Settings page or an agent tool.",
   "keywords": [
     "dsh",
@@ -36,10 +36,14 @@
   },
   "dependencies": {
     "@deepseek-ai/cordis": "~4.1.0",
-    "@deepseek-ai/dsh-sandbox": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-tools": "0.2.2-rc.1",
-    "@deepseek-ai/dsh-typert-protocol": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-sandbox": "0.2.2-rc.5",
+    "@deepseek-ai/dsh-tools": "0.2.2-rc.5",
+    "@deepseek-ai/dsh-typert-protocol": "0.2.2-rc.5",
     "@deepseek-ai/schemastery": "~3.19.0"
+  },
+  "engines": {
+    "node": ">=22.19.0",
+    "dsh": "^0.2.2-rc.5"
   },
   "dsh": {
     "bundle": {

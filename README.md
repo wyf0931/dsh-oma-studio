@@ -8,6 +8,10 @@ No YAML editing, no restart, no hand-written plugin rows: a role becomes live th
 record  →  entry list (persona / tools / skills / delegation)  →  agentPresets.register()  →  presets.json
 ```
 
+## DSH compatibility
+
+Built for DeepSeek Harness **0.2.2-rc.5 and later 0.2.x** (declared as `engines.dsh: "^0.2.2-rc.5"`, matched with prerelease semantics) on Node 22.19.0+. Older 0.2.2-rc.1-era `@deepseek-ai/dsh-*` builds are no longer used.
+
 ## Why
 
 An agent team is only useful when every member is *deterministic*: the researcher never writes files, the reviewer never runs destructive commands, the coder never browses the web. That determinism lives in the composition — which tools, which skills, which persona, which delegation rights — not in a prompt sentence asking the model to behave.
@@ -75,13 +79,13 @@ Every preset also carries a `@deepseek-ai/dsh-time-context` row, so a role alway
 
 ## The two faces
 
-**Agent tool `oma_studio`** — `list`, `get`, `create`, `update`, `remove`. Results are JSON: `{ok: true, value}` or `{ok: false, error: {code, message}, nextStep}`. `list` merges this package's presets with the profile's own declarations and marks each `active` or reports its registry diagnostic.
+**Agent tool `oma_studio`** — `list`, `get`, `create`, `update`, `remove`, `set_chat_visible`. Results are JSON: `{ok: true, value}` or `{ok: false, error: {code, message}, nextStep}`. `list` merges this package's presets with the profile's own declarations and marks each `active` or reports its registry diagnostic.
 
 **Settings → OMA Studio** — the same roster as cards (name, id, source badge, mounted/error badge, tool count, diagnostic), a search field over name/id/description, and a form for every field of the record. Profile presets appear read-only: they are edited in the profile patch file, and the page says so.
 
 The four presets the shipped `@deepseek-ai/dsh-web-app` bundle declares (`standard`, `ptc`, `minimal`, `cordis`) are hidden by default, so the page opens on your own roles; tick **Show system presets** to include them. The filter is that fixed id list, never the preset source, so a role you declared in your own patch layer (for example `coordinator`) always appears. The `oma_studio` tool takes the same `includeSystem` flag, and an explicit `get` by id reads a system preset even while the list hides it.
 
-Every card carries a switch on its right: turn it off to hide that role from the list, and tick **Show hidden** to bring hidden rows back. The choice is stored in `presets.json` (`hidden` ids), so it survives a restart; hiding only affects this page's listing and never unmounts a role. The `oma_studio` tool exposes the same state through `set_hidden` and `includeHidden`.
+Every owned card carries a switch on its right: turn it off to take that role out of the chat agent picker. An off preset stays listed and editable on this page, but is unmounted — the chat picker reads the mounted roster, so an off preset is simply not offered to new sessions; turning it back on remounts it without re-entering anything. The choice is stored on each preset as `chat` in `presets.json`, so it survives a restart. Profile presets are not owned here and cannot be switched off. The `oma_studio` tool exposes the same state through `set_chat_visible`.
 
 Every mutation (from either face) asks for `danger-full-access` approval first: it registers Host plugin rows, mounts them inside every session that selects the preset, and persists the record under the DSH home. `list`/`get` are read-only and need no approval. Without an approval channel a mutation fails closed and nothing is written.
 

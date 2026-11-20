@@ -8,6 +8,10 @@
 记录  →  entry list（persona / 工具 / skills / 委派）  →  agentPresets.register()  →  presets.json
 ```
 
+## DSH 兼容性
+
+面向 DeepSeek Harness **0.2.2-rc.5 及之后的所有 0.2.x**（声明为 `engines.dsh: "^0.2.2-rc.5"`，按 prerelease 语义匹配），Node 22.19.0+。不再使用 0.2.2-rc.1 时代的 `@deepseek-ai/dsh-*` 构建。
+
 ## 为什么需要它
 
 agent 团队只有在每个成员都**确定**时才有用：研究员永远不写文件，评审者永远不跑破坏性命令，实现者永远不联网。这种确定性来自组合——挂哪些工具、哪些 skill、什么人格、什么委派权限——而不是 prompt 里一句「请不要」。
@@ -75,13 +79,13 @@ Host 侧需要 `@deepseek-ai/cordis`、`@deepseek-ai/schemastery`、`@deepseek-a
 
 ## 两个入口
 
-**agent 工具 `oma_studio`**：`list`、`get`、`create`、`update`、`remove`。结果为 JSON：`{ok: true, value}` 或 `{ok: false, error: {code, message}, nextStep}`。`list` 合并本插件的 preset 与 profile 自带声明，并标注 `active` 或附上注册表诊断。
+**agent 工具 `oma_studio`**：`list`、`get`、`create`、`update`、`remove`、`set_chat_visible`。结果为 JSON：`{ok: true, value}` 或 `{ok: false, error: {code, message}, nextStep}`。`list` 合并本插件的 preset 与 profile 自带声明，并标注 `active` 或附上注册表诊断。
 
 **Settings → OMA Studio**：同一份名册以卡片呈现（名称、id、来源徽标、已挂载/异常徽标、工具数、诊断），顶部搜索框按名称/id/描述过滤，表单覆盖记录的全部字段。profile 自带的 preset 以只读方式出现——它们属于 profile 的 patch 文件，页面会直接说明。
 
 官方 `@deepseek-ai/dsh-web-app` bundle 自带的 4 个 preset（`standard`、`ptc`、`minimal`、`cordis`）默认隐藏，页面一打开就是你自己的角色；勾上「显示系统预设」才会包含它们。过滤依据是这份固定 id 列表，而不是 preset 的 source——你在自己 patch 里声明的角色（例如 `coordinator`）始终显示。agent 工具 `oma_studio` 用同一个 `includeSystem` 开关，而显式按 id 调 `get` 时即使列表隐藏了系统 preset 也能读到。
 
-每张卡片右侧有一个开关：关掉即把该角色从列表隐藏，勾上「显示已隐藏」可以把它们找回来。选择保存在 `presets.json` 的 `hidden` 列表中，重启后依然有效；隐藏只影响本页列表，不会卸载角色。agent 工具通过 `set_hidden` 与 `includeHidden` 提供同样的能力。
+每张卡片右侧有一个开关：关掉即把该角色从 chat 的 agent 选择器里移出。关闭后的 preset 在本页仍然列出、可编辑，但会卸载——chat 选择器读的是已挂载名册，所以关闭的 preset 不会被提供给新会话；重新打开则重新挂载，无需重录。选择存在 `presets.json` 里每个 preset 的 `chat` 字段上，重启后依然有效。profile 的 preset 不归本插件所有，不能在这里关闭。agent 工具通过 `set_chat_visible` 提供同样的能力。
 
 任何写操作（两个入口都一样）都先请求 `danger-full-access` 审批：它会注册并挂载 Host 插件行、在选中该 preset 的每个会话里生效、并把记录持久化到 DSH home。`list`/`get` 只读免审批。没有审批通道时写操作会 fail closed，什么也不会写。
 
